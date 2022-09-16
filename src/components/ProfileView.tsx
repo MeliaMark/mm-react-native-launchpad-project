@@ -5,6 +5,9 @@ import {AvatarStats} from '../types';
 interface ProfileViewProps {
   imageUri: string;
   stats: AvatarStats;
+  //TODO:
+  // For function props that don't return anything:
+  // randomiseImageHandler: () => void;
   randomiseImageHandler: () => {};
   saveChangesHandler: () => {};
 }

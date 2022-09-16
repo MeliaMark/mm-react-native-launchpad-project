@@ -14,10 +14,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import {RootStack} from './navigation/RootStack';
 import {BottomTabs} from './navigation/BottomTabs';
 
+// TODO:
+// General comments:
+// Prettier is your friend :)
+// Tidy up files (i.e. remove unnecessary imports/variables) as you go instead of leaving the tidy up until a later date
+
 const App = () => {
   return (
     <NavigationContainer>
-        <RootStack />
+      <RootStack />
     </NavigationContainer>
   );
 };
