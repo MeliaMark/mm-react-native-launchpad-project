@@ -17,7 +17,7 @@ import {BottomTabs} from './navigation/BottomTabs';
 const App = () => {
   return (
     <NavigationContainer>
-        <RootStack />
+      <RootStack />
     </NavigationContainer>
   );
 };

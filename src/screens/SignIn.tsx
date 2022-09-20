@@ -9,12 +9,14 @@ export const SignInScreen = ({navigation}) => {
       <Button
         title="sign in"
         onPress={() => {
+          console.log('Navigating to Home');
           navigation.navigate('Home');
         }}
       />
       <Button
         title="Create Account"
         onPress={() => {
+          console.log('Navigating to character creation');
           navigation.navigate('Create account');
         }}
       />

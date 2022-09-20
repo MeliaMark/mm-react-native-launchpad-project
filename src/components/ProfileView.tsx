@@ -5,8 +5,8 @@ import {AvatarStats} from '../types';
 interface ProfileViewProps {
   imageUri: string;
   stats: AvatarStats;
-  randomiseImageHandler: () => {};
-  saveChangesHandler: () => {};
+  randomiseImageHandler: () => void;
+  saveChangesHandler: () => void;
 }
 
 export const ProfileView = ({
