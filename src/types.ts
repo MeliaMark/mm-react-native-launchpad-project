@@ -1,9 +1,5 @@
 import React, {SetStateAction} from 'react';
 
-export type SetState<T> = React.Dispatch<SetStateAction<T>>;
-
-export type UseState<T> = [T, React.Dispatch<SetStateAction<T>>];
-
 export interface AvatarStats {
   stat1: number;
   stat2: number;
@@ -15,6 +11,8 @@ export interface PlayerData {
   name: string;
   avatarUri: string;
   avatarStats: AvatarStats;
+  wins: number;
+  losses: number;
 }
 
 export enum StatSelection {
@@ -24,14 +22,21 @@ export enum StatSelection {
   Stat4 = 'stat4',
 }
 
-export interface BattleState {
-  choicePhase: {
-    playerSelection: StatSelection;
-    opponentSelection: StatSelection;
-    phaseComplete: boolean;
-  };
-  endPhase: {
-    winner: 'player' | 'opponent' | undefined;
-    phaseComplete: boolean;
-  };
+export interface PlayerSelection {
+  stat: StatSelection;
+  value: number;
 }
+
+export interface OpponentData {
+  name: string;
+  avatarUri: string;
+  selection: PlayerSelection
+}
+
+export enum Winner {
+  Player = 'player',
+  Opponent = 'opponent',
+  Draw = 'draw',
+  Undecided = 'undecided',
+}
+

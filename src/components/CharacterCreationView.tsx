@@ -40,9 +40,9 @@ export const CharacterCreationView = ({
         ) : (
           <Text>No stats available</Text>
         )}
+        <Button title="Roll Stats" onPress={randomiseStatsHandler} />
+        <Button title="finish" onPress={finishCharacterHandler} />
       </View>
-      <Button title="Roll Stats" onPress={randomiseStatsHandler} />
-      <Button title="finish" onPress={finishCharacterHandler} />
     </View>
   );
 };

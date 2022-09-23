@@ -1,9 +1,15 @@
 import React from 'react';
-import {Button, Text, View} from 'react-native';
+import {Button, Text, View, Linking, TouchableOpacity} from 'react-native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../navigation/RootStack';
 
 export const SignInScreen = ({navigation}) => {
+  const onSuccess = (e: any) => {
+    console.log('success')
+    navigation.navigate(e.data).catch(err =>
+      console.error('An error occured', err),
+    );
+  };
   return (
     <View>
       <Button
