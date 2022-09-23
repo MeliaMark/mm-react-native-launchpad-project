@@ -19,7 +19,12 @@ export const FightEnd = ({
   resetFight,
 }: FightEndProps) => {
   if (!opponentData) {
-    return <Text>No opponentData found</Text>;
+    return (
+      <View>
+        <Text>No opponentData found</Text>
+        <Button title="Back" onPress={resetFight} />
+      </View>
+    );
   }
   const fightDetailMessage = getFightDetail(
     playerSelection,
@@ -50,7 +55,7 @@ const getWinnerMessage = (
   } else {
     const winnerName =
       winner === Winner.Player ? playerData.name : opponentData.name;
-    winnerMessage = `${winner} wins!`;
+    winnerMessage = `${winnerName} wins!`;
   }
   return winnerMessage;
 };

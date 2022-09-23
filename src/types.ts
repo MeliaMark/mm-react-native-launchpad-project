@@ -13,6 +13,7 @@ export interface PlayerData {
   avatarStats: AvatarStats;
   wins: number;
   losses: number;
+  trophies: string[]
 }
 
 export enum StatSelection {
@@ -40,3 +41,7 @@ export enum Winner {
   Undecided = 'undecided',
 }
 
+export interface SavedPlayer {
+  id: string,
+  email: string
+}

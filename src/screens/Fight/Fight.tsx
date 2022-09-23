@@ -9,9 +9,11 @@
 // opponent qr code scanned and retrieved data
 // Then compute winner and do stuff
 
+import {useFocusEffect} from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import determineWinner from '../../functions/determineWinner';
+import getStoredPlayerData from '../../functions/getStoredPlayerData';
 import {storage} from '../../store/mmkvStorage';
 import {
   OpponentData,
@@ -21,6 +23,7 @@ import {
   Winner,
 } from '../../types';
 import FightView from './FightView';
+import auth from '@react-native-firebase/auth';
 
 export type QRScanStatus = {
   choiceComplete: boolean;
@@ -37,11 +40,13 @@ export enum FightDisplay {
 }
 
 export const Fight = () => {
-  const storedPlayerDataString = storage.getString('playerData');
-  if (!storedPlayerDataString) {
-    return <Text>Something went wrong, please try again</Text>;
+  let storedPlayerData: PlayerData;
+  try {
+    storedPlayerData = getStoredPlayerData(storage);
+  } catch (error) {
+    console.log('Error occurred when fetching playerData: ', error);
+    return <Text>An error occurred</Text>;
   }
-  const storedPlayerData: PlayerData = JSON.parse(storedPlayerDataString);
   const defaultPlayerStatChoice: PlayerSelection = {
     stat: StatSelection.Stat1,
     value: storedPlayerData.avatarStats.stat1,
@@ -74,7 +79,7 @@ export const Fight = () => {
       avatarUri: playerData?.avatarUri ?? storedPlayerData.avatarUri,
       selection: playerStatChoice,
     };
-    // console.log(JSON.stringify(data)); //for testing
+    console.log(JSON.stringify(data)); //for testing
     return data;
   };
 
@@ -122,12 +127,12 @@ export const Fight = () => {
       const opponentData = JSON.parse(e.data);
       if (
         !opponentData.selection ||
-        !opponentData.selection.stat1 ||
+        !opponentData.selection.stat ||
         !opponentData.avatarUri ||
         !opponentData.name
       ) {
         throw new Error(
-          'opponentData object does not match the expected pattern',
+          `opponentData object does not match the expected pattern. opponentData: ${opponentData}`,
         );
       }
       setOpponentData(opponentData);
@@ -185,11 +190,46 @@ export const Fight = () => {
           playerStatChoice,
           opponentData?.selection,
         );
+
+        const definedPlayerData: PlayerData = playerData ?? storedPlayerData;
+        if (winner === Winner.Player) {
+          const newTrophies = definedPlayerData.trophies.includes(
+            opponentData.avatarUri,
+          )
+            ? [...definedPlayerData?.trophies, opponentData.avatarUri]
+            : definedPlayerData.trophies;
+          const newPlayerData: PlayerData = {
+            ...definedPlayerData,
+            trophies: newTrophies,
+            wins: definedPlayerData.wins + 1,
+          };
+          const newPlayerDataString = JSON.stringify(newPlayerData);
+          storage.set(
+            `playerData.${auth().currentUser?.uid}`,
+            newPlayerDataString,
+          );
+          setPlayerData(newPlayerData);
+        } else if (winner === Winner.Opponent) {
+          const newPlayerData: PlayerData = {
+            ...definedPlayerData,
+            losses: definedPlayerData.losses + 1,
+          };
+          const newPlayerDataString = JSON.stringify(newPlayerData);
+          storage.set(
+            `playerData.${auth().currentUser?.uid}`,
+            newPlayerDataString,
+          );
+          setPlayerData(newPlayerData);
+        }
         setWinner(winner);
       }
       setDisplay(fightDisplay);
     }
   }, [qrScanStatus]);
+
+  useFocusEffect(() => {
+    storedPlayerData = getStoredPlayerData(storage);
+  });
 
   return (
     <FightView

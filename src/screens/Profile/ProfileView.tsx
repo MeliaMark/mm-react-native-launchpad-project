@@ -1,19 +1,14 @@
 import React from 'react';
 import {Button, Image, Text, View} from 'react-native';
-import {AvatarStats} from '../../types';
+import {AvatarStats, PlayerData} from '../../types';
 
 interface ProfileViewProps {
-  imageUri: string;
-  stats: AvatarStats;
-  randomiseImageHandler: () => void;
-  saveChangesHandler: () => void;
+  playerData: PlayerData;
+  logOutHandler: () => void
 }
 
 export const ProfileView = ({
-  imageUri,
-  stats,
-  randomiseImageHandler,
-  saveChangesHandler,
+  playerData, logOutHandler
 }: ProfileViewProps) => {
   return (
     <View>
@@ -22,12 +17,11 @@ export const ProfileView = ({
           width: 50,
           height: 50,
         }}
-        source={{uri: imageUri}}
+        source={{uri: playerData.avatarUri}}
       />
-      <Button title="Change Avatar" onPress={randomiseImageHandler} />
-      <Text key="name">Default Name</Text>
+      <Text key="name">{playerData.name}</Text>
       <View key="stats">
-        {Object.entries(stats).map(([statName, statValue]) => {
+        {Object.entries(playerData.avatarStats).map(([statName, statValue]) => {
           return (
             <Text key={statName}>
               {statName}: {statValue}
@@ -35,7 +29,13 @@ export const ProfileView = ({
           );
         })}
       </View>
-      <Button title="Save Changes" onPress={saveChangesHandler} />
+      <Text key="wins and losses">
+        Wins: {playerData.wins}; Losses {playerData.losses}
+      </Text>
+      <Button
+        title="Log Out"
+        onPress={logOutHandler}
+      />
     </View>
   );
 };

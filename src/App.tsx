@@ -13,11 +13,36 @@ import {View, Text, Button, FlatList} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {RootStack} from './navigation/RootStack';
 import {BottomTabs} from './navigation/BottomTabs';
+import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {SignInScreen} from './screens/SignIn';
 
 const App = () => {
+  const [initialising, setInitialising] = useState<boolean>(true);
+  const [user, setUser] = useState();
+
+  const onAuthStateChanged = user => {
+    setUser(user);
+    if (initialising) setInitialising(false);
+  };
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  }, []);
+
+  if (initialising) return null;
+
+  if (!user) {
+    return (
+      <NavigationContainer>
+        <RootStack />
+      </NavigationContainer>
+    );
+  }
+
   return (
     <NavigationContainer>
-      <RootStack />
+      <BottomTabs playerUid={(user as FirebaseAuthTypes.User).uid} />
     </NavigationContainer>
   );
 };

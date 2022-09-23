@@ -5,49 +5,36 @@ import {AvatarStats, PlayerData} from '../../types';
 import {storage} from '../../store/mmkvStorage';
 import {ProfileView} from './ProfileView';
 import {Button, Text, View} from 'react-native';
+import auth from '@react-native-firebase/auth';
+import getStoredPlayerData from '../../functions/getStoredPlayerData';
+import {useFocusEffect} from '@react-navigation/native';
 
-export const Profile = ({navigation}) => {
-  const storedPlayerDataString = storage.getString('playerData');
-  if (!storedPlayerDataString) {
-    return <Text>Something went wrong, please try again</Text>;
+export const Profile = () => {
+  let storedPlayerData: PlayerData;
+  try {
+    storedPlayerData = getStoredPlayerData(storage);
+  } catch (error) {
+    console.log('Error occurred when fetching playerData: ', error);
+    return <Text>An error occurred</Text>;
   }
-  const storedPlayerData = JSON.parse(storedPlayerDataString);
 
-  const [playerData, setPlayerData] = useState<PlayerData>();
-
-  //candidate for extracting out, just need to modify function so it is compatible with character creation version
-  const getRandomAvatar = useCallback(async () => {
-    console.log('Getting random avatar')
-    const url = `https://sprites-as-a-service-tblytwilzq-ue.a.run.app/api/v1/sprite`;
-    const response = await axios.get(url);
-    const imageUri = `data:image/png;base64,${response.data}`;
-    const newPlayerData = {...storedPlayerData, avatarUri: imageUri};
-    setPlayerData(newPlayerData);
-  }, []);
-
-  const saveChanges = () => {
-    console.log('Saving changes')
-    const playerDataString = `${JSON.stringify(playerData)}`
-    storage.set("playerData", playerDataString);
+  const logOutHandler = () => {
+    auth()
+      .signOut()
+      .then(() => console.log('User signed out!'));
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      storedPlayerData = getStoredPlayerData(storage);
+    }, []),
+  );
 
   return (
     <View>
       <ProfileView
-        imageUri={
-          playerData ? playerData.avatarUri : storedPlayerData.avatarUri
-        }
-        stats={
-          playerData ? playerData.avatarStats : storedPlayerData.avatarStats
-        }
-        randomiseImageHandler={getRandomAvatar}
-        saveChangesHandler={saveChanges}
-      />
-      <Button
-        title="Log Out"
-        onPress={() => {
-          navigation.navigate('SignIn');
-        }}
+        playerData={storedPlayerData}
+        logOutHandler={logOutHandler}
       />
     </View>
   );
