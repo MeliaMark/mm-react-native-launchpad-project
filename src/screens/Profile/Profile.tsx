@@ -1,9 +1,9 @@
-import {CharacterCreationView} from '../components/CharacterCreationView';
+import {CharacterCreationView} from '../CharacterCreation/CharacterCreationView';
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
-import {AvatarStats, PlayerData, SetState} from '../types';
-import {storage} from '../store/mmkvStorage';
-import {ProfileView} from '../components/ProfileView';
+import {AvatarStats, PlayerData} from '../../types';
+import {storage} from '../../store/mmkvStorage';
+import {ProfileView} from './ProfileView';
 import {Button, Text, View} from 'react-native';
 
 export const Profile = ({navigation}) => {

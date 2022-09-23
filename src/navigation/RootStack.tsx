@@ -2,7 +2,7 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {SignInScreen} from '../screens/SignIn';
 import {BottomTabs} from './BottomTabs';
-import { CharacterCreation } from '../screens/CharacterCreation';
+import { CharacterCreation } from '../screens/CharacterCreation/CharacterCreation';
 
 export interface RootStackParamList {
   SignIn: undefined;
@@ -19,7 +19,7 @@ export const RootStack = () => {
       <Stack.Screen
         name="Home"
         component={BottomTabs}
-        // options={{headerShown: false}}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

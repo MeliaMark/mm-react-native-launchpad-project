@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Image, Text, View} from 'react-native';
-import {AvatarStats} from '../types';
+import {AvatarStats} from '../../types';
 
 interface CharacterCreationViewProps {
   imageUri: string;

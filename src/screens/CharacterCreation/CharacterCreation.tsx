@@ -1,8 +1,8 @@
-import {CharacterCreationView} from '../components/CharacterCreationView';
+import {CharacterCreationView} from './CharacterCreationView';
 import React, {useCallback, useEffect, useState} from 'react';
 import axios from 'axios';
-import {AvatarStats, PlayerData} from '../types';
-import {storage} from '../store/mmkvStorage';
+import {AvatarStats, PlayerData} from '../../types';
+import {storage} from '../../store/mmkvStorage';
 import analytics from '@react-native-firebase/analytics';
 import { Text } from 'react-native';
 
